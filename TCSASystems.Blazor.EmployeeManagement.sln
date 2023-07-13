@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCSASystems.Blazor.EmployeeManagement", "TCSASystems.Blazor.EmployeeManagement\TCSASystems.Blazor.EmployeeManagement.csproj", "{7DF94DC6-5D32-442F-8F2D-05F0B8301AC7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DF94DC6-5D32-442F-8F2D-05F0B8301AC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DF94DC6-5D32-442F-8F2D-05F0B8301AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DF94DC6-5D32-442F-8F2D-05F0B8301AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DF94DC6-5D32-442F-8F2D-05F0B8301AC7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3395C872-E9F2-4889-84E5-204EB3999152}
+	EndGlobalSection
+EndGlobal
