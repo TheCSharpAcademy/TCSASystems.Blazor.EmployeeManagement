@@ -1,0 +1,19 @@
+﻿<div class="h-100">
+    <div class="mask d-flex align-items-center h-100">
+        <div class="container">
+            <div class="row justify-content-center p-5">
+                <div class="col-12">
+                    <div class="card shadow-2-strong" style="background-color: #f5f7fa;">
+                        <div class="card-body">
+                            @ChildContent
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

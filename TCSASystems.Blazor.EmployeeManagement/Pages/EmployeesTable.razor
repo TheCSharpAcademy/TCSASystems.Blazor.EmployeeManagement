@@ -1,0 +1,133 @@
+﻿@page "/"
+@using TCSASystems.Blazor.EmployeeManagement.Models;
+@using TCSASystems.Blazor.EmployeeManagement.Services;
+
+@if (Employees != null)
+{
+    <Card>
+        <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+                <tbody>
+                    @foreach (var employee in Employees)
+                    {
+                        <tr class="shadow-lg m-1 employee-row mb-5">
+                            <td class="centered-cell"><img class="round-image" width="60" src="@employee.ImgUrl" /></td>
+                            <td>
+                                <div class="pt-2">
+                                    <div class="employee-name centered-subdiv">@employee.Name</div>
+                                    <div class="employee-position centered-subdiv">@employee.Position.GetDisplayName()</div>
+                                </div>
+                            </td>
+                            <td class="centered-cell @GetEmployeeTypeStyle(employee.Type)">@employee.Type.GetDisplayName()</td>
+                            <td class="centered-cell employee-salary">$@employee.Salary</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </Card>
+}
+
+@code {
+    [Inject] private IEmployeeService EmployeeService { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
+
+    private List<Employee>? Employees;
+    private List<Employee>? EmployeesBackup;
+
+    private bool ShowWarning = false;
+    private string ErrorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await EmployeeService.GetEmployees();
+
+        if (response.StatusCode == 500)
+        {
+            ShowWarning = true;
+            ErrorMessage = response.StatusMessage;
+        }
+        else
+        {
+            Employees = response.Employees;
+            EmployeesBackup = Employees;
+        }
+    }
+
+    private string GetEmployeeTypeStyle(EmployeeType employeeType) => employeeType switch
+    {
+        EmployeeType.Freelance => "freelance",
+        EmployeeType.PartTime => "part-time",
+        EmployeeType.Casual => "casual",
+        EmployeeType.FullTime => "full-time"
+    };
+}
+
+<style>
+    html,
+    body,
+    .intro {
+        height: 100%;
+    }
+
+    table td,
+    table th {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .table {
+        border-spacing: 0 20px;
+    }
+
+    .card {
+        border-radius: .5rem;
+    }
+
+    .round-image {
+        border-radius: 50%;
+    }
+
+    .employee-name {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .employee-salary {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .centered-cell {
+        height: 80px;
+        width: 160px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .centered-subdiv {
+        height: 25px;
+        vertical-align: middle;
+    }
+
+    .part-time {
+        color: white;
+        background-color: darkred !important;
+    }
+
+    .full-time {
+        color: white;
+        background-color: darkblue !important;
+    }
+
+    .casual {
+        color: white;
+        background-color: darkgreen !important;
+    }
+
+    .freelance {
+        color: white;
+        background-color: darkmagenta !important;
+    }
+</style>
