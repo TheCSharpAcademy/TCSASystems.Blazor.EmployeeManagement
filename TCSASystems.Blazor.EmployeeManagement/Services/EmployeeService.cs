@@ -6,7 +6,7 @@ namespace TCSASystems.Blazor.EmployeeManagement.Services;
 
 public interface IEmployeeService
 {
-    Task<GetAllEmployeesResponse> GetEmployees();
+    Task<GetEmployeesResponse> GetEmployees();
 }
 
 public class EmployeeService: IEmployeeService
@@ -17,23 +17,23 @@ public class EmployeeService: IEmployeeService
     {
         _factory = factory;
     }
-    public async Task<GetAllEmployeesResponse> GetEmployees()
+    public async Task<GetEmployeesResponse> GetEmployees()
     {
-        var response = new GetAllEmployeesResponse();
+        var response = new GetEmployeesResponse();
         try
         {
             using (var context = _factory.CreateDbContext())
             {
                 var employees = context.Employees.ToList();
                 response.StatusCode = 200;
-                response.StatusMessage = "Success";
+                response.Message = "Success";
                 response.Employees = employees;
             }
         }
         catch (Exception ex)
         {
             response.StatusCode = 500;
-            response.StatusMessage = "Error retrieving employees: " + ex.Message;
+            response.Message = "Error retrieving employees: " + ex.Message;
             response.Employees = null;
         }
 

@@ -33,25 +33,11 @@
     [Inject] private NavigationManager NavigationManager { get; set; }
 
     private List<Employee>? Employees;
-    private List<Employee>? EmployeesBackup;
-
-    private bool ShowWarning = false;
-    private string ErrorMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
         var response = await EmployeeService.GetEmployees();
-
-        if (response.StatusCode == 500)
-        {
-            ShowWarning = true;
-            ErrorMessage = response.StatusMessage;
-        }
-        else
-        {
-            Employees = response.Employees;
-            EmployeesBackup = Employees;
-        }
+        Employees = response.Employees;
     }
 
     private string GetEmployeeTypeStyle(EmployeeType employeeType) => employeeType switch
