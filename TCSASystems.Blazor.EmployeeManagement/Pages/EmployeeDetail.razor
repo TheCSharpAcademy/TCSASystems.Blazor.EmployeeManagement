@@ -1,0 +1,92 @@
+﻿@page "/employee/{employeeId:int}"
+@using TCSASystems.Blazor.EmployeeManagement.Models.DTOs;
+@using TCSASystems.Blazor.EmployeeManagement.Models;
+@using TCSASystems.Blazor.EmployeeManagement.Services;
+
+<Card>
+    <div class="row user-detail-row">
+        <h3>Update Employee</h3>
+        <div class="form-group">
+            <EditForm Model="@addEmployeeForm" OnValidSubmit="EditEmployee">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <p>
+                    <div class="form-floating mb-3">
+                        <InputText class="form-control" id="floatingInput" placeholder="Name here" @bind-Value="addEmployeeForm.Name" />
+                        <label for="floatingInput">Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputNumber class="form-control" id="floatingInput" placeholder="Salary here" @bind-Value="addEmployeeForm.Salary" />
+                        <label for="floatingInput">Salary</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputSelect shadow rounded id="floatingInput" placeholder="Employee here" @bind-Value="addEmployeeForm.Type" class="form-select">
+                            @foreach (EmployeeType type in Enum.GetValues(typeof(EmployeeType)))
+                            {
+                                <option value="@type">@type.GetDisplayName()</option>
+                            }
+                        </InputSelect>
+                        <label for="floatingInput">Employment Type</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputSelect shadow rounded id="floatingInput" placeholder="Position here" @bind-Value="addEmployeeForm.Position" class="form-select">
+                            @foreach (Position position in Enum.GetValues(typeof(Position)))
+                            {
+                                <option value="@position">@position.GetDisplayName()</option>
+                            }
+                        </InputSelect>
+                        <label for="floatingInput">Position</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputText class="form-control" id="floatingInput" placeholder="Img here" @bind-Value="addEmployeeForm.ImgUrl" />
+                        <label for="floatingInput">Image Url</label>
+                    </div>
+                </p>
+                <button class="btn btn-primary" type="submit">Update</button>
+                <div @onclick="@DeleteEmployee" class="btn btn-danger" type="button">Delete</div>
+            </EditForm>
+        </div>
+    </div>
+</Card>
+
+@code {
+    [Parameter] public int EmployeeId { get; set; }
+
+    [Inject] private IEmployeeService EmployeeService { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
+
+    private AddEmployeeForm addEmployeeForm = new();
+
+    private Employee Employee;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await EmployeeService.GetEmployee(EmployeeId);
+
+        Employee = response.Employee;
+
+        addEmployeeForm.Name = Employee.Name;
+        addEmployeeForm.Type = Employee.Type;
+        addEmployeeForm.Position = Employee.Position;
+        addEmployeeForm.Salary = Employee.Salary;
+        addEmployeeForm.ImgUrl = Employee.ImgUrl;
+    }
+
+    private async Task EditEmployee()
+    {
+        Employee.Name = addEmployeeForm.Name;
+        Employee.Type = addEmployeeForm.Type;
+        Employee.Position = addEmployeeForm.Position;
+        Employee.Salary = addEmployeeForm.Salary;
+        Employee.ImgUrl = addEmployeeForm.ImgUrl;
+
+        var response = await EmployeeService.EditEmployee(Employee);
+        NavigationManager.NavigateTo($"/");
+    }
+
+    private async Task DeleteEmployee()
+    {
+        var response = await EmployeeService.DeleteEmployee(Employee);
+        NavigationManager.NavigateTo($"/");
+    }
+}

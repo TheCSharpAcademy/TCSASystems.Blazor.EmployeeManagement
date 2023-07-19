@@ -1,0 +1,10 @@
+﻿<button 
+    @onclick="OnClickCallback" 
+    type="button" 
+    class="btn shadow-lg btn-primary p-3 rounded-circle oi oi-pencil" />
+   
+
+@code {
+    [Parameter]
+    public EventCallback OnClickCallback { get; set; }
+}
