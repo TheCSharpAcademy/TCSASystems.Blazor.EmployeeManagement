@@ -20,6 +20,9 @@
                             </td>
                             <td class="centered-cell @GetEmployeeTypeStyle(employee.Type)">@employee.Type.GetDisplayName()</td>
                             <td class="centered-cell employee-salary">$@employee.Salary</td>
+                            <td class="centered-cell">
+                                <TableButton OnClickCallback="@(() => NavigateToEmployeeDetail(employee.Id))" />
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -47,6 +50,12 @@
         EmployeeType.Casual => "casual",
         EmployeeType.FullTime => "full-time"
     };
+
+    private void NavigateToEmployeeDetail(int employeeId)
+    {
+        // Navigate to the user page using the user ID
+        NavigationManager.NavigateTo($"/employee/{employeeId}");
+    }
 }
 
 <style>
