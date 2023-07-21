@@ -1,11 +1,17 @@
 ﻿@page "/"
-@using TCSASystems.Blazor.EmployeeManagement.Models;
-@using TCSASystems.Blazor.EmployeeManagement.Services;
 
+@if (ShowWarning)
+{
+    <Warning Type=Warning.WarningType.Error Message="@ErrorMessage" />
+}
 @if (Employees != null)
 {
     <Card>
         <div class="table-responsive">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Name here" @oninput="FilterEmployees" />
+                <label for="floatingInput">Filter by name</label>
+            </div>
             <table class="table table-borderless mb-0">
                 <tbody>
                     @foreach (var employee in Employees)
@@ -21,7 +27,7 @@
                             <td class="centered-cell @GetEmployeeTypeStyle(employee.Type)">@employee.Type.GetDisplayName()</td>
                             <td class="centered-cell employee-salary">$@employee.Salary</td>
                             <td class="centered-cell">
-                                <TableButton OnClickCallback="@(() => NavigateToEmployeeDetail(employee.Id))" />
+                                <TableButton OnClickCallback="@(() => NavigateToEmployeeDetail(employee.Id))"/>
                             </td>
                         </tr>
                     }
@@ -36,11 +42,25 @@
     [Inject] private NavigationManager NavigationManager { get; set; }
 
     private List<Employee>? Employees;
+    private List<Employee>? EmployeesBackup;
+
+    private bool ShowWarning = false;
+    private string ErrorMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
         var response = await EmployeeService.GetEmployees();
-        Employees = response.Employees;
+
+        if (response.StatusCode == 500)
+        {
+            ShowWarning = true;
+            ErrorMessage = response.Message;
+        }
+        else
+        {
+            Employees = response.Employees;
+            EmployeesBackup = Employees;
+        }
     }
 
     private string GetEmployeeTypeStyle(EmployeeType employeeType) => employeeType switch
@@ -53,8 +73,13 @@
 
     private void NavigateToEmployeeDetail(int employeeId)
     {
-        // Navigate to the user page using the user ID
         NavigationManager.NavigateTo($"/employee/{employeeId}");
+    }
+
+    private void FilterEmployees(ChangeEventArgs e)
+    {
+        Employees = EmployeesBackup;
+        Employees = Employees.Where(x => x.Name.IndexOf(e.Value.ToString(), StringComparison.OrdinalIgnoreCase) >= 0).ToList();
     }
 }
 
