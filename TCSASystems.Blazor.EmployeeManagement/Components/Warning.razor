@@ -1,0 +1,46 @@
+﻿<div class="modal d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color:@Background">
+            <span class="close-button oi oi-x p-2" aria-hidden="true" @onclick="OnClickCallback"></span>
+            <div class="modal-body">
+                @Message
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public EventCallback OnClickCallback { get; set; }
+    [Parameter] public string Message { get; set; }
+    [Parameter] public string Background { get; set; }
+    [Parameter] public WarningType Type { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Background = Type == WarningType.Success ? "green" : "red";
+    }
+
+    public enum WarningType
+    {
+        Success,
+        Error
+    }
+}
+
+<style>
+    .modal-content {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .modal-body {
+        color: white;
+    }
+    
+    .close-button {
+        margin-top: -35px;
+    }
+</style>
+
+

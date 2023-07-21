@@ -2,7 +2,7 @@
 
 @if (ShowWarning)
 {
-    <Warning Type=Warning.WarningType.Error Message="@ErrorMessage" />
+    <Warning OnClickCallback="DismissWarning" Type=Warning.WarningType.Error Message="@ErrorMessage" />
 }
 @if (Employees != null)
 {
@@ -80,6 +80,12 @@
     {
         Employees = EmployeesBackup;
         Employees = Employees.Where(x => x.Name.IndexOf(e.Value.ToString(), StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+    }
+
+    private void DismissWarning()
+    {
+        ShowWarning = false;
+        NavigationManager.NavigateTo($"identity/account/logout", true);
     }
 }
 
